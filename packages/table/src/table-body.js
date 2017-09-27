@@ -1,16 +1,20 @@
 import { getCell, getColumnByCell, getRowIdentity } from './util';
+import { hasClass, addClass, removeClass } from 'element-ui/src/utils/dom';
 import ElCheckbox from 'element-ui/packages/checkbox';
+import ElTooltip from 'element-ui/packages/tooltip';
 import debounce from 'throttle-debounce/debounce';
 
 export default {
   components: {
-    ElCheckbox
+    ElCheckbox,
+    ElTooltip
   },
 
   props: {
     store: {
       required: true
     },
+    stripe: Boolean,
     context: {},
     layout: {
       required: true
@@ -75,6 +79,8 @@ export default {
                 : ''
               ]
             ).concat(
+              this._self.$parent.$slots.append
+            ).concat(
               <el-tooltip effect={ this.table.tooltipEffect } placement="top" ref="tooltip" content={ this.tooltipContent }></el-tooltip>
             )
           }
@@ -88,14 +94,14 @@ export default {
       if (!this.store.states.isComplex) return;
       const el = this.$el;
       if (!el) return;
-      const rows = el.querySelectorAll('tbody > tr');
+      const rows = el.querySelectorAll('tbody > tr.el-table__row');
       const oldRow = rows[oldVal];
       const newRow = rows[newVal];
       if (oldRow) {
-        oldRow.classList.remove('hover-row');
+        removeClass(oldRow, 'hover-row');
       }
       if (newRow) {
-        newRow.classList.add('hover-row');
+        addClass(newRow, 'hover-row');
       }
     },
     'store.states.currentRow'(newVal, oldVal) {
@@ -103,16 +109,16 @@ export default {
       const el = this.$el;
       if (!el) return;
       const data = this.store.states.data;
-      const rows = el.querySelectorAll('tbody > tr');
+      const rows = el.querySelectorAll('tbody > tr.el-table__row');
       const oldRow = rows[data.indexOf(oldVal)];
       const newRow = rows[data.indexOf(newVal)];
       if (oldRow) {
-        oldRow.classList.remove('current-row');
+        removeClass(oldRow, 'current-row');
       } else if (rows) {
-        [].forEach.call(rows, row => row.classList.remove('current-row'));
+        [].forEach.call(rows, row => removeClass(row, 'current-row'));
       }
       if (newRow) {
-        newRow.classList.add('current-row');
+        addClass(newRow, 'current-row');
       }
     }
   },
@@ -181,8 +187,11 @@ export default {
     },
 
     getRowClass(row, index) {
-      const classes = [];
+      const classes = ['el-table__row'];
 
+      if (this.stripe && index % 2 === 1) {
+        classes.push('el-table__row--striped');
+      }
       const rowClassName = this.rowClassName;
       if (typeof rowClassName === 'string') {
         classes.push(rowClassName);
@@ -206,18 +215,24 @@ export default {
       // 判断是否text-overflow, 如果是就显示tooltip
       const cellChild = event.target.querySelector('.cell');
 
-      if (cellChild.scrollWidth > cellChild.offsetWidth) {
+      if (hasClass(cellChild, 'el-tooltip') && cellChild.scrollWidth > cellChild.offsetWidth) {
         const tooltip = this.$refs.tooltip;
 
         this.tooltipContent = cell.innerText;
         tooltip.referenceElm = cell;
+        tooltip.$refs.popper && (tooltip.$refs.popper.style.display = 'none');
         tooltip.doDestroy();
+        tooltip.setExpectedState(true);
         this.activateTooltip(tooltip);
       }
     },
 
     handleCellMouseLeave(event) {
-      this.$refs.tooltip.handleClosePopper();
+      const tooltip = this.$refs.tooltip;
+      if (tooltip) {
+        tooltip.setExpectedState(false);
+        tooltip.handleClosePopper();
+      }
       const cell = getCell(event);
       if (!cell) return;
 

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import merge from 'element-ui/src/utils/merge';
 import PopupManager from 'element-ui/src/utils/popup/popup-manager';
 import getScrollBarWidth from '../scrollbar-width';
+import { getStyle } from '../dom';
 
 let idSeed = 1;
 const transitions = [];
@@ -49,8 +50,12 @@ const getDOM = function(dom) {
 };
 
 export default {
+  model: {
+    prop: 'visible',
+    event: 'visible-change'
+  },
   props: {
-    value: {
+    visible: {
       type: Boolean,
       default: false
     },
@@ -120,7 +125,7 @@ export default {
   },
 
   watch: {
-    value(val) {
+    visible(val) {
       if (val) {
         if (this._opening) return;
         if (!this.rendered) {
@@ -141,7 +146,7 @@ export default {
     open(options) {
       if (!this.rendered) {
         this.rendered = true;
-        this.$emit('input', true);
+        this.$emit('visible-change', true);
       }
 
       const props = merge({}, this.$props || this, options);
@@ -170,10 +175,7 @@ export default {
 
       this._opening = true;
 
-      // 使用 vue-popup 的组件，如果需要和父组件通信显示的状态，应该使用 value，它是一个 prop，
-      // 这样在父组件中用 v-model 即可；否则可以使用 visible，它是一个 data
-      this.visible = true;
-      this.$emit('input', true);
+      this.$emit('visible-change', true);
 
       const dom = getDOM(this.$el);
 
@@ -197,7 +199,8 @@ export default {
           }
           scrollBarWidth = getScrollBarWidth();
           let bodyHasOverflow = document.documentElement.clientHeight < document.body.scrollHeight;
-          if (scrollBarWidth > 0 && bodyHasOverflow) {
+          let bodyOverflowY = getStyle(document.body, 'overflowY');
+          if (scrollBarWidth > 0 && (bodyHasOverflow || bodyOverflowY === 'scroll')) {
             document.body.style.paddingRight = scrollBarWidth + 'px';
           }
           document.body.style.overflow = 'hidden';
@@ -244,8 +247,7 @@ export default {
     },
 
     doClose() {
-      this.visible = false;
-      this.$emit('input', false);
+      this.$emit('visible-change', false);
       this._closing = true;
 
       this.onClose && this.onClose();

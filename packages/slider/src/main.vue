@@ -1,5 +1,6 @@
 <template>
-  <div class="el-slider">
+  <div class="el-slider"
+    :class="{ 'is-vertical': vertical, 'el-slider--with-input': showInput }">
     <el-input-number
       v-model="firstValue"
       v-if="showInput && !range"
@@ -10,24 +11,25 @@
       :controls="showInputControls"
       :min="min"
       :max="max"
+      :debounce="debounce"
       size="small">
     </el-input-number>
     <div class="el-slider__runway"
       :class="{ 'show-input': showInput, 'disabled': disabled }"
+      :style="runwayStyle"
       @click="onSliderClick"
       ref="slider">
       <div
         class="el-slider__bar"
-        :style="{
-          width: barWidth,
-          left: barLeft
-        }">
+        :style="barStyle">
       </div>
       <slider-button
+        :vertical="vertical"
         v-model="firstValue"
         ref="button1">
       </slider-button>
       <slider-button
+        :vertical="vertical"
         v-model="secondValue"
         ref="button2"
         v-if="range">
@@ -35,7 +37,7 @@
       <div
         class="el-slider__stop"
         v-for="item in stops"
-        :style="{ 'left': item + '%' }"
+        :style="vertical ? { 'bottom': item + '%' } : { 'left': item + '%' }"
         v-if="showStops">
       </div>
     </div>
@@ -45,10 +47,12 @@
 <script type="text/babel">
   import ElInputNumber from 'element-ui/packages/input-number';
   import SliderButton from './button.vue';
-  import { getStyle } from 'element-ui/src/utils/dom';
+  import Emitter from 'element-ui/src/mixins/emitter';
 
   export default {
     name: 'ElSlider',
+
+    mixins: [Emitter],
 
     props: {
       min: {
@@ -83,6 +87,7 @@
         type: Boolean,
         default: true
       },
+      formatTooltip: Function,
       disabled: {
         type: Boolean,
         default: false
@@ -90,6 +95,17 @@
       range: {
         type: Boolean,
         default: false
+      },
+      vertical: {
+        type: Boolean,
+        default: false
+      },
+      height: {
+        type: String
+      },
+      debounce: {
+        type: Number,
+        default: 300
       }
     },
 
@@ -103,7 +119,8 @@
         firstValue: null,
         secondValue: null,
         oldValue: null,
-        dragging: false
+        dragging: false,
+        sliderSize: 1
       };
     },
 
@@ -172,6 +189,7 @@
             this.secondValue = val[1];
             if (this.valueChanged()) {
               this.$emit('change', [this.minValue, this.maxValue]);
+              this.dispatch('ElFormItem', 'el.form.change', [this.minValue, this.maxValue]);
               this.oldValue = val.slice();
             }
           }
@@ -184,6 +202,7 @@
             this.firstValue = val;
             if (this.valueChanged()) {
               this.$emit('change', val);
+              this.dispatch('ElFormItem', 'el.form.change', val);
               this.oldValue = val;
             }
           }
@@ -207,17 +226,30 @@
 
       onSliderClick(event) {
         if (this.disabled || this.dragging) return;
-        const sliderOffsetLeft = this.$refs.slider.getBoundingClientRect().left;
-        this.setPosition((event.clientX - sliderOffsetLeft) / this.$sliderWidth * 100);
+        this.resetSize();
+        if (this.vertical) {
+          const sliderOffsetBottom = this.$refs.slider.getBoundingClientRect().bottom;
+          this.setPosition((sliderOffsetBottom - event.clientY) / this.sliderSize * 100);
+        } else {
+          const sliderOffsetLeft = this.$refs.slider.getBoundingClientRect().left;
+          this.setPosition((event.clientX - sliderOffsetLeft) / this.sliderSize * 100);
+        }
+      },
+
+      resetSize() {
+        if (this.$refs.slider) {
+          this.sliderSize = this.$refs.slider[`client${ this.vertical ? 'Height' : 'Width' }`];
+        }
       }
     },
 
     computed: {
-      $sliderWidth() {
-        return parseInt(getStyle(this.$refs.slider, 'width'), 10);
-      },
-
       stops() {
+        if (this.step === 0) {
+          process.env.NODE_ENV !== 'production' &&
+          console.warn('[Element Warn][Slider]step should not be 0.');
+          return [];
+        }
         const stopCount = (this.max - this.min) / this.step;
         const stepWidth = 100 * this.step / (this.max - this.min);
         const result = [];
@@ -242,13 +274,13 @@
         return Math.max(this.firstValue, this.secondValue);
       },
 
-      barWidth() {
+      barSize() {
         return this.range
           ? `${ 100 * (this.maxValue - this.minValue) / (this.max - this.min) }%`
           : `${ 100 * (this.firstValue - this.min) / (this.max - this.min) }%`;
       },
 
-      barLeft() {
+      barStart() {
         return this.range
           ? `${ 100 * (this.minValue - this.min) / (this.max - this.min) }%`
           : '0%';
@@ -260,6 +292,21 @@
           return decimal ? decimal.length : 0;
         });
         return Math.max.apply(null, precisions);
+      },
+
+      runwayStyle() {
+        return this.vertical ? { height: this.height } : {};
+      },
+
+      barStyle() {
+        return this.vertical
+          ? {
+            height: this.barSize,
+            bottom: this.barStart
+          } : {
+            width: this.barSize,
+            left: this.barStart
+          };
       }
     },
 
@@ -281,6 +328,12 @@
         }
         this.oldValue = this.firstValue;
       }
+      this.resetSize();
+      window.addEventListener('resize', this.resetSize);
+    },
+
+    beforeDestroy() {
+      window.removeEventListener('resize', this.resetSize);
     }
   };
 </script>

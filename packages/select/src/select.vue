@@ -11,8 +11,8 @@
       <transition-group @after-leave="resetInputHeight">
         <el-tag
           v-for="item in selected"
-          :key="item.value"
-          closable
+          :key="getValueKey(item)"
+          :closable="!disabled"
           :hit="item.hitState"
           type="primary"
           @close="deleteTag($event, item)"
@@ -32,7 +32,7 @@
         @keydown.down.prevent="navigateOptions('next')"
         @keydown.up.prevent="navigateOptions('prev')"
         @keydown.enter.prevent="selectOption"
-        @keydown.esc.prevent="visible = false"
+        @keydown.esc.stop.prevent="visible = false"
         @keydown.delete="deletePrevTag"
         v-model="query"
         :debounce="remote ? 300 : 0"
@@ -57,7 +57,7 @@
       @keydown.native.down.prevent="navigateOptions('next')"
       @keydown.native.up.prevent="navigateOptions('prev')"
       @keydown.native.enter.prevent="selectOption"
-      @keydown.native.esc.prevent="visible = false"
+      @keydown.native.esc.stop.prevent="visible = false"
       @keydown.native.tab="visible = false"
       @paste.native="debouncedOnInputChange"
       @mouseenter.native="inputHovering = true"
@@ -66,8 +66,8 @@
     </el-input>
     <transition
       name="el-zoom-in-top"
-      @after-leave="doDestroy"
-      @after-enter="handleMenuEnter">
+      @before-enter="handleMenuEnter"
+      @after-leave="doDestroy">
       <el-select-menu
         ref="popper"
         v-show="visible && emptyText !== false">
@@ -84,7 +84,7 @@
           </el-option>
           <slot></slot>
         </el-scrollbar>
-        <p class="el-select-dropdown__empty" v-if="emptyText && !allowCreate">{{ emptyText }}</p>
+        <p class="el-select-dropdown__empty" v-if="emptyText && (allowCreate && options.length === 0 || !allowCreate)">{{ emptyText }}</p>
       </el-select-menu>
     </transition>
   </div>
@@ -103,7 +103,9 @@
   import { addClass, removeClass, hasClass } from 'element-ui/src/utils/dom';
   import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
   import { t } from 'element-ui/src/locale';
-  import merge from 'element-ui/src/utils/merge';
+  import scrollIntoView from 'element-ui/src/utils/scroll-into-view';
+  import { getValueByPath } from 'element-ui/src/utils/util';
+
   const sizeMap = {
     'large': 42,
     'small': 30,
@@ -166,7 +168,9 @@
 
     props: {
       name: String,
-      value: {},
+      value: {
+        required: true
+      },
       size: String,
       disabled: Boolean,
       clearable: Boolean,
@@ -190,6 +194,11 @@
         default() {
           return t('el.select.placeholder');
         }
+      },
+      defaultFirstOption: Boolean,
+      valueKey: {
+        type: String,
+        default: 'value'
       }
     },
 
@@ -197,7 +206,7 @@
       return {
         options: [],
         cachedOptions: [],
-        createdOption: null,
+        createdLabel: null,
         createdSelected: false,
         selected: this.multiple ? [] : {},
         isSelect: true,
@@ -206,13 +215,10 @@
         cachedPlaceHolder: '',
         optionsCount: 0,
         filteredOptionsCount: 0,
-        dropdownUl: null,
         visible: false,
         selectedLabel: '',
         hoverIndex: -1,
         query: '',
-        bottomOverflow: 0,
-        topOverflow: 0,
         optionsAllDisabled: false,
         inputHovering: false,
         currentPlaceholder: ''
@@ -242,6 +248,7 @@
       },
 
       query(val) {
+        if (val === null || val === undefined) return;
         this.$nextTick(() => {
           if (this.visible) this.broadcast('ElSelectDropdown', 'updatePopper');
         });
@@ -262,6 +269,9 @@
           this.filteredOptionsCount = this.optionsCount;
           this.broadcast('ElOption', 'queryChange', val);
           this.broadcast('ElOptionGroup', 'queryChange');
+        }
+        if (this.defaultFirstOption && (this.filterable || this.remote) && this.filteredOptionsCount) {
+          this.checkDefaultFirstOption();
         }
       },
 
@@ -285,11 +295,10 @@
             }
           });
           if (!this.multiple) {
-            this.getOverflows();
             if (this.selected) {
               if (this.filterable && this.allowCreate &&
                 this.createdSelected && this.createdOption) {
-                this.selectedLabel = this.createdOption.currentLabel;
+                this.selectedLabel = this.createdLabel;
               } else {
                 this.selectedLabel = this.selected.currentLabel;
               }
@@ -325,6 +334,9 @@
         if ([].indexOf.call(inputs, document.activeElement) === -1) {
           this.setSelected();
         }
+        if (this.defaultFirstOption && (this.filterable || this.remote) && this.filteredOptionsCount) {
+          this.checkDefaultFirstOption();
+        }
       }
     },
 
@@ -343,44 +355,33 @@
         }
       },
 
+      scrollToOption(option) {
+        const target = Array.isArray(option) && option[0] ? option[0].$el : option.$el;
+        if (this.$refs.popper && target) {
+          const menu = this.$refs.popper.$el.querySelector('.el-select-dropdown__wrap');
+          scrollIntoView(menu, target);
+        }
+      },
+
       handleMenuEnter() {
-        if (!this.dropdownUl) {
-          this.dropdownUl = this.$refs.popper.$el.querySelector('.el-select-dropdown__wrap');
-          this.getOverflows();
-        }
-        if (!this.multiple && this.dropdownUl) {
-          this.resetMenuScroll();
-        }
-      },
-
-      getOverflows() {
-        if (this.dropdownUl && this.selected && this.selected.$el) {
-          let selectedRect = this.selected.$el.getBoundingClientRect();
-          let popperRect = this.$refs.popper.$el.getBoundingClientRect();
-          this.bottomOverflow = selectedRect.bottom - popperRect.bottom;
-          this.topOverflow = selectedRect.top - popperRect.top;
-        }
-      },
-
-      resetMenuScroll() {
-        if (this.bottomOverflow > 0) {
-          this.dropdownUl.scrollTop += this.bottomOverflow;
-        } else if (this.topOverflow < 0) {
-          this.dropdownUl.scrollTop += this.topOverflow;
-        }
+        this.$nextTick(() => this.scrollToOption(this.selected));
       },
 
       getOption(value) {
         let option;
+        const isObject = Object.prototype.toString.call(value).toLowerCase() === '[object object]';
         for (let i = this.cachedOptions.length - 1; i >= 0; i--) {
           const cachedOption = this.cachedOptions[i];
-          if (cachedOption.value === value) {
+          const isEqual = isObject
+            ? getValueByPath(cachedOption.value, this.valueKey) === getValueByPath(value, this.valueKey)
+            : cachedOption.value === value;
+          if (isEqual) {
             option = cachedOption;
             break;
           }
         }
         if (option) return option;
-        const label = typeof value === 'string' || typeof value === 'number'
+        const label = !isObject
           ? value : '';
         let newOption = {
           value: value,
@@ -396,7 +397,7 @@
         if (!this.multiple) {
           let option = this.getOption(this.value);
           if (option.created) {
-            this.createdOption = merge({}, option);
+            this.createdLabel = option.currentLabel;
             this.createdSelected = true;
           } else {
             this.createdSelected = false;
@@ -440,6 +441,7 @@
 
       doDestroy() {
         this.$refs.popper && this.$refs.popper.doDestroy();
+        this.dropdownUl = null;
       },
 
       handleClose() {
@@ -462,7 +464,9 @@
 
       deletePrevTag(e) {
         if (e.target.value.length <= 0 && !this.toggleLastOptionHitState()) {
-          this.value.pop();
+          const value = this.value.slice();
+          value.pop();
+          this.$emit('input', value);
         }
       },
 
@@ -505,26 +509,42 @@
       },
 
       handleOptionSelect(option) {
-        if (!this.multiple) {
-          this.$emit('input', option.value);
-          this.visible = false;
-        } else {
-          let optionIndex = -1;
-          this.value.forEach((item, index) => {
-            if (item === option.value) {
-              optionIndex = index;
-            }
-          });
+        if (this.multiple) {
+          const value = this.value.slice();
+          const optionIndex = this.getValueIndex(value, option.value);
           if (optionIndex > -1) {
-            this.value.splice(optionIndex, 1);
-          } else if (this.multipleLimit <= 0 || this.value.length < this.multipleLimit) {
-            this.value.push(option.value);
+            value.splice(optionIndex, 1);
+          } else if (this.multipleLimit <= 0 || value.length < this.multipleLimit) {
+            value.push(option.value);
           }
+          this.$emit('input', value);
           if (option.created) {
             this.query = '';
             this.inputLength = 20;
           }
           if (this.filterable) this.$refs.input.focus();
+        } else {
+          this.$emit('input', option.value);
+          this.visible = false;
+        }
+        this.$nextTick(() => this.scrollToOption(option));
+      },
+
+      getValueIndex(arr = [], value) {
+        const isObject = Object.prototype.toString.call(value).toLowerCase() === '[object object]';
+        if (!isObject) {
+          return arr.indexOf(value);
+        } else {
+          const valueKey = this.valueKey;
+          let index = -1;
+          arr.some((item, i) => {
+            if (getValueByPath(item, valueKey) === getValueByPath(value, valueKey)) {
+              index = i;
+              return true;
+            }
+            return false;
+          });
+          return index;
         }
       },
 
@@ -543,13 +563,13 @@
           return;
         }
         if (this.options.length === 0 || this.filteredOptionsCount === 0) return;
+        this.optionsAllDisabled = this.options.length === this.options.filter(item => item.disabled === true).length;
         if (!this.optionsAllDisabled) {
           if (direction === 'next') {
             this.hoverIndex++;
             if (this.hoverIndex === this.options.length) {
               this.hoverIndex = 0;
             }
-            this.resetScrollTop();
             if (this.options[this.hoverIndex].disabled === true ||
               this.options[this.hoverIndex].groupDisabled === true ||
               !this.options[this.hoverIndex].visible) {
@@ -561,7 +581,6 @@
             if (this.hoverIndex < 0) {
               this.hoverIndex = this.options.length - 1;
             }
-            this.resetScrollTop();
             if (this.options[this.hoverIndex].disabled === true ||
               this.options[this.hoverIndex].groupDisabled === true ||
               !this.options[this.hoverIndex].visible) {
@@ -569,19 +588,7 @@
             }
           }
         }
-      },
-
-      resetScrollTop() {
-        let bottomOverflowDistance = this.options[this.hoverIndex].$el.getBoundingClientRect().bottom -
-          this.$refs.popper.$el.getBoundingClientRect().bottom;
-        let topOverflowDistance = this.options[this.hoverIndex].$el.getBoundingClientRect().top -
-          this.$refs.popper.$el.getBoundingClientRect().top;
-        if (bottomOverflowDistance > 0) {
-          this.dropdownUl.scrollTop += bottomOverflowDistance;
-        }
-        if (topOverflowDistance < 0) {
-          this.dropdownUl.scrollTop += topOverflowDistance;
-        }
+        this.$nextTick(() => this.scrollToOption(this.options[this.hoverIndex]));
       },
 
       selectOption() {
@@ -594,12 +601,15 @@
         event.stopPropagation();
         this.$emit('input', '');
         this.visible = false;
+        this.$emit('clear');
       },
 
       deleteTag(event, tag) {
         let index = this.selected.indexOf(tag);
         if (index > -1 && !this.disabled) {
-          this.value.splice(index, 1);
+          const value = this.value.slice();
+          value.splice(index, 1);
+          this.$emit('input', value);
           this.$emit('remove-tag', tag);
         }
         event.stopPropagation();
@@ -628,6 +638,34 @@
       handleResize() {
         this.resetInputWidth();
         if (this.multiple) this.resetInputHeight();
+      },
+
+      checkDefaultFirstOption() {
+        this.hoverIndex = -1;
+        for (let i = 0; i !== this.options.length; ++i) {
+          const option = this.options[i];
+          if (this.query) {
+            // pick first options that passes the filter
+            if (!option.disabled && !option.groupDisabled && option.visible) {
+              this.hoverIndex = i;
+              break;
+            }
+          } else {
+            // pick currently selected option
+            if (option.itemSelected) {
+              this.hoverIndex = i;
+              break;
+            }
+          }
+        }
+      },
+
+      getValueKey(item) {
+        if (Object.prototype.toString.call(item.value).toLowerCase() !== '[object object]') {
+          return item.value;
+        } else {
+          return getValueByPath(item.value, this.valueKey);
+        }
       }
     },
 
@@ -639,7 +677,6 @@
       if (!this.multiple && Array.isArray(this.value)) {
         this.$emit('input', '');
       }
-      this.setSelected();
 
       this.debouncedOnInputChange = debounce(this.debounce, () => {
         this.onInputChange();
@@ -663,6 +700,7 @@
           this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width;
         }
       });
+      this.setSelected();
     },
 
     beforeDestroy() {

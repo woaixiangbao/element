@@ -93,6 +93,35 @@
     }]
   }];
 
+  const data3 = [{
+    id: 1,
+    label: '一级 2',
+    children: [{
+      id: 3,
+      label: '二级 2-1',
+      children: [{
+        id: 4,
+        label: '三级 3-1-1'
+      }, {
+        id: 5,
+        label: '三级 3-1-2',
+        disabled: true
+      }]
+    }, {
+      id: 2,
+      label: '二级 2-2',
+      disabled: true,
+      children: [{
+        id: 6,
+        label: '三级 3-2-1'
+      }, {
+        id: 7,
+        label: '三级 3-2-2',
+        disabled: true
+      }]
+    }]
+  }];
+
   let id = 1000;
 
   const regions = [{
@@ -190,7 +219,7 @@
 
       renderContent(h, { node, data, store }) {
         return (
-          <span>
+          <span style="white-space: normal">
             <span>
               <span>{node.label}</span>
             </span>
@@ -211,6 +240,7 @@
       return {
         data,
         data2,
+        data3,
         regions,
         defaultProps,
         props,
@@ -427,6 +457,62 @@
 ```
 :::
 
+### 禁用状态
+可将 Tree 的某些节点设置为禁用状态
+
+::: demo 通过`disabled`设置禁用状态。
+```html
+<el-tree
+  :data="data3"
+  show-checkbox
+  node-key="id"
+  :default-expanded-keys="[2, 3]"
+  :default-checked-keys="[5]">
+</el-tree>
+
+<script>
+  export default {
+    data() {
+      return {
+        data3: [{
+          id: 1,
+          label: '一级 2',
+          children: [{
+            id: 3,
+            label: '二级 2-1',
+            children: [{
+              id: 4,
+              label: '三级 3-1-1'
+            }, {
+              id: 5,
+              label: '三级 3-1-2',
+              disabled: true
+            }]
+          }, {
+            id: 2,
+            label: '二级 2-2',
+            disabled: true,
+            children: [{
+              id: 6,
+              label: '三级 3-2-1'
+            }, {
+              id: 7,
+              label: '三级 3-2-2',
+              disabled: true
+            }]
+          }]
+        }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
+      };
+    }
+  };
+</script>
+```
+:::
+
 ### 树节点的选择
 
 ::: demo 本例展示如何获取和设置选中节点。获取和设置各有两种方式：通过 node 或通过 key。如果需要通过 key 来获取或设置，则必须设置`node-key`。
@@ -526,7 +612,7 @@
 ### 自定义节点内容
 节点的内容支持自定义，可以在节点区添加按钮或图标等内容
 
-::: demo 使用`render-content`指定渲染函数，该函数返回需要的节点区内容即可。渲染函数的用法请参考 Vue 文档。
+::: demo 使用`render-content`指定渲染函数，该函数返回需要的节点区内容即可。渲染函数的用法请参考 Vue 文档。注意：由于 jsfiddle 不支持 JSX 语法，所以本例在 jsfiddle 中无法运行。但是在实际的项目中，只要正确地配置了相关依赖，就可以正常运行。
 ```html
 <el-tree
   :data="data2"
@@ -698,7 +784,7 @@
 
 ### 手风琴模式
 
-每次只打开一个同级树节点展开
+对于同一级的节点，每次只能展开一个
 
 ::: demo
 ```html
@@ -769,7 +855,7 @@
 | --------------------- | ---------------------------------------- | --------------------------- | ---- | ----- |
 | data                  | 展示数据                                     | array                       | —    | —     |
 | empty-text            | 内容为空的时候展示的文本                             | String                      | —    | —     |
-| node-key              | 每个树节点用来作为唯一标识的属性，整颗树应该是唯一的               | String                      | —    | —     |
+| node-key              | 每个树节点用来作为唯一标识的属性，整棵树应该是唯一的               | String                      | —    | —     |
 | props                 | 配置选项，具体看下表                               | object                      | —    | —     |
 | load                  | 加载子树数据的方法                                | function(node, resolve)     | —    | —     |
 | render-content        | 树节点的内容区的渲染 Function                      | Function(h, { node }        | —    | —     |
@@ -789,8 +875,9 @@
 ### props
 | 参数       | 说明                | 类型     | 可选值  | 默认值  |
 | -------- | ----------------- | ------ | ---- | ---- |
-| label    | 指定节点标签为节点对象的某个属性值 | string | —    | —    |
-| children | 指定子树为节点对象的某个属性值   | string | —    | —    |
+| label    | 指定节点标签为节点对象的某个属性值 | string, function(data, node) | —    | —    |
+| children | 指定子树为节点对象的某个属性值 | string, function(data, node) | —    | —    |
+| disabled | 指定节点选择框是否禁用为节点对象的某个属性值 |  boolean, function(data, node) | —    | —    |
 
 ### 方法
 `Tree` 拥有如下方法，返回目前被选中的节点数组：

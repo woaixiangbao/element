@@ -63,6 +63,30 @@
   };
 </script>
 
+<style>
+  .demo-block.demo-date-picker .source {
+    padding: 0;
+    display: flex;
+  }
+
+  .demo-date-picker .block {
+    padding: 30px 0;
+    text-align: center;
+    border-right: solid 1px #EFF2F6;
+    flex: 1;
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  .demo-date-picker .demonstration {
+    display: block;
+    color: #8492a6;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+</style>
+
 ## DatePicker
 
 Use Date Picker for date input.
@@ -262,6 +286,7 @@ Picking a date range is supported.
 | popper-class | custom class name for DatePicker's dropdown | string | — | — |
 | picker-options | additional options, check the table below | object | — | {} |
 | range-separator | range separator | string | - | ' - ' |
+| default-value | optional default time of the picker | Date | anything accepted by `new Date()` | - |
 
 ### Picker Options
 | Attribute      | Description          | Type      | Accepted Values       | Default  |

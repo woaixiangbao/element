@@ -26,7 +26,7 @@ export default {
     },
     transition: {
       type: String,
-      default: 'fade-in-linear'
+      default: 'el-fade-in-linear'
     },
     popperOptions: {
       default() {
@@ -35,7 +35,21 @@ export default {
           gpuAcceleration: false
         };
       }
+    },
+    enterable: {
+      type: Boolean,
+      default: true
+    },
+    hideAfter: {
+      type: Number,
+      default: 0
     }
+  },
+
+  data() {
+    return {
+      timeoutPending: null
+    };
   },
 
   beforeCreate() {
@@ -58,8 +72,8 @@ export default {
           name={ this.transition }
           onAfterLeave={ this.doDestroy }>
           <div
-            onMouseleave={ () => { this.debounceClose(); this.togglePreventClose(); } }
-            onMouseenter= { this.togglePreventClose }
+            onMouseleave={ () => { this.setExpectedState(false); this.debounceClose(); } }
+            onMouseenter= { () => { this.setExpectedState(true); } }
             ref="popper"
             v-show={!this.disabled && this.showPopper}
             class={
@@ -76,10 +90,13 @@ export default {
     if (!vnode) return vnode;
     const data = vnode.data = vnode.data || {};
     const on = vnode.data.on = vnode.data.on || {};
+    const nativeOn = vnode.data.nativeOn = vnode.data.nativeOn || {};
 
-    on.mouseenter = this.addEventHandle(on.mouseenter, this.handleShowPopper);
-    on.mouseleave = this.addEventHandle(on.mouseleave, this.debounceClose);
     data.staticClass = this.concatClass(data.staticClass, 'el-tooltip');
+    on.mouseenter = this.addEventHandle(on.mouseenter, this.show);
+    on.mouseleave = this.addEventHandle(on.mouseleave, this.hide);
+    nativeOn.mouseenter = this.addEventHandle(nativeOn.mouseenter, this.show);
+    nativeOn.mouseleave = this.addEventHandle(nativeOn.mouseleave, this.hide);
 
     return vnode;
   },
@@ -89,8 +106,24 @@ export default {
   },
 
   methods: {
+    show() {
+      this.setExpectedState(true);
+      this.handleShowPopper();
+    },
+
+    hide() {
+      this.setExpectedState(false);
+      this.debounceClose();
+    },
+
     addEventHandle(old, fn) {
-      return old ? Array.isArray(old) ? old.concat(fn) : [old, fn] : fn;
+      if (!old) {
+        return fn;
+      } else if (Array.isArray(old)) {
+        return old.indexOf(fn) > -1 ? old : old.concat(fn);
+      } else {
+        return old === fn ? old : [old, fn];
+      }
     },
 
     concatClass(a, b) {
@@ -99,21 +132,34 @@ export default {
     },
 
     handleShowPopper() {
-      if (this.manual) return;
+      if (!this.expectedState || this.manual) return;
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         this.showPopper = true;
       }, this.openDelay);
+
+      if (this.hideAfter > 0) {
+        this.timeoutPending = setTimeout(() => {
+          this.showPopper = false;
+        }, this.hideAfter);
+      }
     },
 
     handleClosePopper() {
-      if (this.preventClose || this.manual) return;
+      if (this.enterable && this.expectedState || this.manual) return;
       clearTimeout(this.timeout);
+
+      if (this.timeoutPending) {
+        clearTimeout(this.timeoutPending);
+      }
       this.showPopper = false;
     },
 
-    togglePreventClose() {
-      this.preventClose = !this.preventClose;
+    setExpectedState(expectedState) {
+      if (expectedState === false) {
+        clearTimeout(this.timeoutPending);
+      }
+      this.expectedState = expectedState;
     }
   }
 };

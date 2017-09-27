@@ -5,6 +5,16 @@
         this.$message('这是一条消息提示');
       },
 
+      openVn() {
+        const h = this.$createElement;
+        this.$message({
+          message: h('p', null, [
+            h('span', null, '内容可以是 '),
+            h('i', { style: 'color: teal' }, 'VNode')
+          ])
+        });
+      },
+
       open2() {
         this.$message({
           message: '恭喜你，这是一条成功消息',
@@ -70,6 +80,7 @@
 ```html
 <template>
   <el-button :plain="true" @click="open">打开消息提示</el-button>
+  <el-button :plain="true" @click="openVn">VNode</el-button>
 </template>
 
 <script>
@@ -77,6 +88,16 @@
     methods: {
       open() {
         this.$message('这是一条消息提示');
+      },
+
+      openVn() {
+        const h = this.$createElement;
+        this.$message({
+          message: h('p', null, [
+            h('span', null, '内容可以是 '),
+            h('i', { style: 'color: teal' }, 'VNode')
+          ])
+        });
       }
     }
   }
@@ -145,23 +166,23 @@
       open5() {
         this.$message({
           showClose: true,
-          message: '恭喜你，这是一条成功消息'
+          message: '这是一条消息提示'
         });
       },
 
       open6() {
         this.$message({
           showClose: true,
-          message: '警告哦，这是一条警告消息',
-          type: 'warning'
+          message: '恭喜你，这是一条成功消息',
+          type: 'success'
         });
       },
 
       open7() {
         this.$message({
           showClose: true,
-          message: '错了哦，这是一条错误消息',
-          type: 'error'
+          message: '警告哦，这是一条警告消息',
+          type: 'warning'
         });
       },
 
@@ -191,11 +212,12 @@ import { Message } from 'element-ui';
 ```
 
 此时调用方法为 `Message(options)`。我们也为每个 type 定义了各自的方法，如 `Message.success(options)`。
+并且可以调用 `Message.closeAll()` 手动关闭所有实例。
 
 ### Options
 | 参数      | 说明          | 类型      | 可选值                           | 默认值  |
 |---------- |-------------- |---------- |--------------------------------  |-------- |
-| message | 消息文字 | string | — | — |
+| message | 消息文字 | string / VNode | — | — |
 | type | 主题 | string | success/warning/info/error | info |
 | iconClass | 自定义图标的类名，会覆盖 `type` | string | — | — |
 | customClass | 自定义类名 | string | — | — |

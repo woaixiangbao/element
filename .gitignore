@@ -13,4 +13,5 @@ fe.element/element-ui
 .npmrc
 coverage
 *.sublime-project
-*.sublime-workspace
+*.sublime-workspak
+waiter.config.js

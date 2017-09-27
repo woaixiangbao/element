@@ -41,7 +41,8 @@
                 :date="date"
                 :picker-width="pickerWidth"
                 @pick="handleTimePick"
-                :visible="timePickerVisible">
+                :visible="timePickerVisible"
+                @mounted="$refs.timepicker.format=timeFormat">
               </time-picker>
             </span>
           </div>
@@ -160,7 +161,7 @@
           this.date = newVal;
           this.year = newVal.getFullYear();
           this.month = newVal.getMonth();
-          this.$emit('pick', newVal, true);
+          this.$emit('pick', newVal, false);
         }
       },
 
@@ -182,12 +183,13 @@
       date(newVal) {
         this.year = newVal.getFullYear();
         this.month = newVal.getMonth();
+        if (this.selectionMode === 'week') this.week = getWeekNumber(newVal);
       }
     },
 
     methods: {
       handleClear() {
-        this.date = new Date();
+        this.date = this.$options.defaultValue ? new Date(this.$options.defaultValue) : new Date();
         this.$emit('pick');
       },
 
@@ -293,8 +295,7 @@
             this.$emit('pick', new Date(value.getTime()));
           }
           this.date.setFullYear(value.getFullYear());
-          this.date.setMonth(value.getMonth());
-          this.date.setDate(value.getDate());
+          this.date.setMonth(value.getMonth(), value.getDate());
         } else if (this.selectionMode === 'week') {
           this.week = value.week;
           this.$emit('pick', value.date);
@@ -309,7 +310,7 @@
 
         this.date.setFullYear(year);
         if (this.selectionMode === 'year') {
-          this.$emit('pick', new Date(year));
+          this.$emit('pick', new Date(year, 0, 1));
         } else {
           this.currentView = 'month';
         }
@@ -324,6 +325,7 @@
       },
 
       confirm() {
+        this.date.setMilliseconds(0);
         this.$emit('pick', this.date);
       },
 
@@ -358,7 +360,7 @@
       return {
         popperClass: '',
         pickerWidth: 0,
-        date: new Date(),
+        date: this.$options.defaultValue ? new Date(this.$options.defaultValue) : new Date(),
         value: '',
         showTime: false,
         selectionMode: 'day',
@@ -372,7 +374,8 @@
         week: null,
         showWeekNumber: false,
         timePickerVisible: false,
-        width: 0
+        width: 0,
+        format: ''
       };
     },
 
@@ -383,12 +386,12 @@
 
       visibleTime: {
         get() {
-          return formatDate(this.date, 'HH:mm:ss');
+          return formatDate(this.date, this.timeFormat);
         },
 
         set(val) {
           if (val) {
-            const date = parseDate(val, 'HH:mm:ss');
+            const date = parseDate(val, this.timeFormat);
             if (date) {
               date.setFullYear(this.date.getFullYear());
               date.setMonth(this.date.getMonth());
@@ -403,18 +406,22 @@
 
       visibleDate: {
         get() {
-          return formatDate(this.date);
+          return formatDate(this.date, this.dateFormat);
         },
 
         set(val) {
-          const date = parseDate(val, 'yyyy-MM-dd');
-          if (date) {
-            date.setHours(this.date.getHours());
-            date.setMinutes(this.date.getMinutes());
-            date.setSeconds(this.date.getSeconds());
-            this.date = date;
-            this.resetView();
+          const date = parseDate(val, this.dateFormat);
+          if (!date) {
+            return;
           }
+          if (typeof this.disabledDate === 'function' && this.disabledDate(date)) {
+            return;
+          }
+          date.setHours(this.date.getHours());
+          date.setMinutes(this.date.getMinutes());
+          date.setSeconds(this.date.getSeconds());
+          this.date = date;
+          this.resetView();
         }
       },
 
@@ -430,6 +437,22 @@
           return startYear + ' - ' + (startYear + 9);
         }
         return this.year + ' ' + yearTranslation;
+      },
+
+      timeFormat() {
+        if (this.format && this.format.indexOf('ss') === -1) {
+          return 'HH:mm';
+        } else {
+          return 'HH:mm:ss';
+        }
+      },
+
+      dateFormat() {
+        if (this.format) {
+          return this.format.replace('HH', '').replace(':mm', '').replace(':ss', '').trim();
+        } else {
+          return 'yyyy-MM-dd';
+        }
       }
     }
   };

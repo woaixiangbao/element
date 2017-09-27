@@ -29,6 +29,7 @@ const defaults = {
 import Vue from 'vue';
 import msgboxVue from './main.vue';
 import merge from 'element-ui/src/utils/merge';
+import { isVNode } from 'element-ui/src/utils/vdom';
 
 const MessageBoxConstructor = Vue.extend(msgboxVue);
 
@@ -46,19 +47,14 @@ const defaultCallback = action => {
       }
     }
     if (currentMsg.resolve) {
-      let $type = currentMsg.options.$type;
-      if ($type === 'confirm' || $type === 'prompt') {
-        if (action === 'confirm') {
-          if (instance.showInput) {
-            currentMsg.resolve({ value: instance.inputValue, action });
-          } else {
-            currentMsg.resolve(action);
-          }
-        } else if (action === 'cancel' && currentMsg.reject) {
-          currentMsg.reject(action);
+      if (action === 'confirm') {
+        if (instance.showInput) {
+          currentMsg.resolve({ value: instance.inputValue, action });
+        } else {
+          currentMsg.resolve(action);
         }
-      } else {
-        currentMsg.resolve(action);
+      } else if (action === 'cancel' && currentMsg.reject) {
+        currentMsg.reject(action);
       }
     }
   }
@@ -78,7 +74,7 @@ const showNextMsg = () => {
   }
   instance.action = '';
 
-  if (!instance.value || instance.closeTimer) {
+  if (!instance.visible || instance.closeTimer) {
     if (msgQueue.length > 0) {
       currentMsg = msgQueue.shift();
 
@@ -97,6 +93,12 @@ const showNextMsg = () => {
         oldCb(action, instance);
         showNextMsg();
       };
+      if (isVNode(instance.message)) {
+        instance.$slots.default = [instance.message];
+        instance.message = null;
+      } else {
+        delete instance.$slots.default;
+      }
       ['modal', 'showClose', 'closeOnClickModal', 'closeOnPressEscape'].forEach(prop => {
         if (instance[prop] === undefined) {
           instance[prop] = true;
@@ -105,7 +107,7 @@ const showNextMsg = () => {
       document.body.appendChild(instance.$el);
 
       Vue.nextTick(() => {
-        instance.value = true;
+        instance.visible = true;
       });
     }
   }
@@ -156,6 +158,8 @@ MessageBox.alert = (message, title, options) => {
   if (typeof title === 'object') {
     options = title;
     title = '';
+  } else if (title === undefined) {
+    title = '';
   }
   return MessageBox(merge({
     title: title,
@@ -170,6 +174,8 @@ MessageBox.confirm = (message, title, options) => {
   if (typeof title === 'object') {
     options = title;
     title = '';
+  } else if (title === undefined) {
+    title = '';
   }
   return MessageBox(merge({
     title: title,
@@ -183,6 +189,8 @@ MessageBox.prompt = (message, title, options) => {
   if (typeof title === 'object') {
     options = title;
     title = '';
+  } else if (title === undefined) {
+    title = '';
   }
   return MessageBox(merge({
     title: title,
@@ -194,7 +202,7 @@ MessageBox.prompt = (message, title, options) => {
 };
 
 MessageBox.close = () => {
-  instance.value = false;
+  instance.visible = false;
   msgQueue = [];
   currentMsg = null;
 };

@@ -1,3 +1,44 @@
+<style>
+  .upload-tip {
+    color: #8492a6;
+    font-size: 12px;
+    margin-top: 7px;
+  }
+  .demo-box {
+    margin-bottom: 24px;
+
+    .upload-demo {
+      width: 360px;
+    }
+    .avatar-uploader {
+      .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+
+        &:hover {
+          border-color: #20a0ff;
+        }
+      }
+      .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: @width;
+        line-height: @height;
+        text-align: center;
+      }
+      .avatar {
+        width: 178px;
+        height: @width;
+        display: block;
+      }
+    }
+  }
+</style>
+
 <script>
   export default {
     data() {
@@ -350,7 +391,7 @@ multiple | whether uploading multiple files is permitted | boolean | — | —
 data | additions options of request | object | — | —
 name | key name for uploaded file | string | — | file
 with-credentials | whether cookies are sent | boolean | — |false
-show-upload-list | whether to show the uploaded file list | boolean | — | true
+show-file-list | whether to show the uploaded file list | boolean | — | true
  drag | whether to activate drag and drop mode | boolean | — | false
 accept | accepted [file types](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-accept), will not work when `thumbnail-mode` is `true` | string | — | —
 on-preview | hook function when clicking the uploaded files | function(file) | — | —
@@ -358,15 +399,17 @@ on-remove | hook function when files are removed | function(file, fileList) | �
 on-success | hook function when uploaded successfully | function(response, file, fileList) | — | —
 on-error | hook function when some errors occurs | function(err, file, fileList) | — | —
 on-progress | hook function when some progress occurs | function(event, file, fileList) | — | — |
-on-change | hook function when file status change | function(file, fileList) | — | — |
-before-upload | hook function before uploading with the file to be uploaded as its parameter. If `false` or a `Promise` is returned, uploading will be aborted | function(file) | — | —
+on-change | hook function when select file or upload file success or upload file fail | function(file, fileList) | — | — |
+before-upload | hook function before uploading with the file to be uploaded as its parameter. If `false` is returned or a `Promise` is returned and then is rejected, uploading will be aborted | function(file) | — | —
 thumbnail-mode | whether thumbnail is displayed | boolean | — | false
-file-list | default uploaded files, i.e: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}] | array | — | []
+file-list | default uploaded files, e.g. [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}] | array | — | []
 list-type | type of fileList | string | text/picture/picture-card | text |
 auto-upload | whether to auto upload file | boolean | — | true |
 http-request | override default xhr behavior, allowing you to implement your own upload-file's request | function | — | — |
+disabled | whether to disable upload | boolean | — | false |
 
-### Events
-| Event Name | Description | Parameters |
+### Methods
+| Methods Name | Description | Parameters |
 |---------- |-------- |---------- |
-| clearFiles | clear the uploaded file list | — |
+| clearFiles | clear the uploaded file list (this method is not supported in the `before-upload` hook) | — |
+| abort | cancel upload request | （ file: fileList's item ） |

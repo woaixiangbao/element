@@ -1,0 +1,653 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"preci",
+				"precisionFactor"
+			],
+			[
+				"comm",
+				"commonConfig"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"pro",
+				"prototype"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "packages/collapse/src/collapse.vue",
+			"settings":
+			{
+				"buffer_size": 1467,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "package.json",
+			"settings":
+			{
+				"buffer_size": 4829,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "packages/loading/src/index.js",
+			"settings":
+			{
+				"buffer_size": 2975,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "packages/loading/src/loading.vue",
+			"settings":
+			{
+				"buffer_size": 826,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 147.0,
+		"last_filter": "install",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"git commit",
+				"Git: Commit"
+			],
+			[
+				"git status",
+				"Git: Status"
+			],
+			[
+				"git commi",
+				"Git: Commit"
+			],
+			[
+				"git:add",
+				"Git: Add All"
+			],
+			[
+				"git",
+				"Git: Status"
+			],
+			[
+				"git: stat",
+				"Git: Status"
+			],
+			[
+				"git status ",
+				"Git: Status"
+			],
+			[
+				"git:pull",
+				"Git: Pull"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"key",
+				"Preferences: Key Bindings - Default"
+			],
+			[
+				"side",
+				"View: Toggle Side Bar"
+			],
+			[
+				"keybin",
+				"Preferences: Key Bindings - User"
+			],
+			[
+				"reindent",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"css",
+				"Set Syntax: CSS"
+			]
+		],
+		"width": 593.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib2,os; pf='Package Control.sublime-package'; ipp = sublime.installed_packages_path(); os.makedirs( ipp ) if not os.path.exists(ipp) else None; urllib2.install_opener( urllib2.build_opener( urllib2.ProxyHandler( ))); open( os.path.join( ipp, pf), 'wb' ).write( urllib2.urlopen( 'http://sublime.wbond.net/' +pf.replace( ' ','%20' )).read()); print( 'Please restart Sublime Text to finish installation')"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/jianqing/eleme/element",
+		"/Users/jianqing/eleme/element/packages",
+		"/Users/jianqing/eleme/element/packages/dropdown",
+		"/Users/jianqing/eleme/element/packages/dropdown/src",
+		"/Users/jianqing/eleme/element/packages/loading",
+		"/Users/jianqing/eleme/element/packages/loading/src"
+	],
+	"file_history":
+	[
+		"/Users/jianqing/eleme/element/packages/collapse/src/collapse-item.vue",
+		"/Users/jianqing/eleme/element/packages/input-number/src/input-number.vue",
+		"/Users/jianqing/eleme/element/packages/input/src/input.vue",
+		"/Users/jianqing/eleme/element/packages/autocomplete/src/autocomplete-suggestions.vue",
+		"/Users/jianqing/eleme/element/packages/carousel/src/item.vue",
+		"/Users/jianqing/eleme/element/packages/carousel/src/main.vue",
+		"/Users/jianqing/eleme/element/packages/date-picker/src/picker/date-picker.js",
+		"/Users/jianqing/eleme/element/packages/date-picker/src/picker/time-picker.js",
+		"/Users/jianqing/eleme/element/packages/select/src/option.vue",
+		"/Users/jianqing/eleme/element/packages/table/src/table-column.js",
+		"/Users/jianqing/eleme/element/packages/tree/src/tree.vue",
+		"/Users/jianqing/eleme/element/packages/autocomplete/src/autocomplete.vue",
+		"/Users/jianqing/eleme/element/packages/cascader/src/main.vue",
+		"/Users/jianqing/eleme/element/packages/collapse/src/collapse.vue",
+		"/Users/jianqing/eleme/element/packages/button/src/button.vue",
+		"/Users/jianqing/eleme/element/packages/button/src/button-group.vue",
+		"/Users/jianqing/eleme/element/examples/docs/zh-CN/collapse.md",
+		"/Users/jianqing/eleme/element/src/transitions/collapse-transition.js",
+		"/Users/jianqing/eleme/element/src/mixins/emitter.js",
+		"/Users/jianqing/eleme/element/package.json",
+		"/Users/jianqing/eleme/element/src/utils/dom.js",
+		"/Users/jianqing/eleme/element/src/index.js",
+		"/Users/jianqing/eleme/element/build/bin/build-entry.js",
+		"/Users/jianqing/eleme/element/.babelrc",
+		"/Users/jianqing/eleme/element/examples/components/demo-block.vue",
+		"/Users/jianqing/eleme/element/examples/components/footer-nav.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/index.js",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/pt-collapse.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/index.js",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/components/widget-editor/field-list.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/components/widget-editor/metric-dimension-list.md",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/index.html",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/components/widget-editor/editor-header-chart-choose.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/demo/uiDemo.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/components/widget-editor/main.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/pt-input-number.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/pt-input.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/demo/keenUI.vue",
+		"/Users/jianqing/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/jianqing/Library/Application Support/Sublime Text 3/Packages/Alignment/Default (OSX).sublime-keymap",
+		"/Users/jianqing/Library/Application Support/Sublime Text 3/Packages/User/Base File.sublime-settings",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/styles/framework/_colors.scss",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/styles/pt-input-number.scss",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/pt-slider.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/styles/framework/_font.scss",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui/src/pt-checkbox.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/components/styles/framework/_variables.scss",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/components/widget-editor/field-date-range.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/components/widget-editor/field-setting.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/components/widget-editor/field-style.vue",
+		"/Users/jianqing/work/ptmind/ptone-web/src/v2/components/widget-editor/field-sort.vue",
+		"/Users/jianqing/work/ptone-web/src/assets/sass/widget.scss",
+		"/Users/jianqing/work/ptone-web/.gitignore",
+		"/Users/jianqing/work/ptone-web/ptone-web.sublime-project",
+		"/Users/jianqing/Downloads/______.js",
+		"/Users/jianqing/work/ptone-web/src/assets/css/widget.css",
+		"/Users/jianqing/Downloads/SVG-Morpheus-master/demos/demo.js",
+		"/Users/jianqing/Downloads/dimension/searchlist/dimension.searchlist.directive.js",
+		"/Users/jianqing/Downloads/dimension/searchlist/dimension.searchlist.controller.js",
+		"/Users/jianqing/javascripting/draggable.html",
+		"/Users/jianqing/javascripting/draggable2.html",
+		"/Users/jianqing/javascripting/draggable3.html",
+		"/Users/jianqing/javascripting/Sortable-master/index.html",
+		"/Users/jianqing/javascripting/Sortable-master/st/app.js",
+		"/Users/jianqing/javascripting/toFixed.js",
+		"/Users/jianqing/javascripting/_css.html",
+		"/Users/jianqing/javascripting/draggable4.html",
+		"/Users/jianqing/javascripting/draggable5.html",
+		"/Users/jianqing/Downloads/Sortable.js",
+		"/Users/jianqing/javascripting/bubbleSort.js",
+		"/Users/jianqing/javascripting/test.html",
+		"/Users/jianqing/javascripting/strings.js",
+		"/Users/jianqing/Downloads/90/index.html",
+		"/Users/jianqing/learn-node/http/demo.js",
+		"/Users/jianqing/learn-node/http/demo.html",
+		"/Users/jianqing/learn-node/http/callback.js",
+		"/Users/jianqing/learn-node/http/as.js",
+		"/Users/jianqing/learn-node/http/event.js",
+		"/Users/jianqing/learn-node/http/http.js",
+		"/Users/jianqing/learn-node/http/imooc-crawler.js",
+		"/Users/jianqing/learn-node/http/events.js",
+		"/Users/jianqing/learn-node/http/crawler.js",
+		"/Users/jianqing/learn-node/school/index.js",
+		"/Users/jianqing/learn-node/school/student.js",
+		"/Users/jianqing/learn-node/school/teacher.js",
+		"/Users/jianqing/learn-node/school/klass.js",
+		"/Users/jianqing/work/ptmind/ptone-web/src/components/modules/widget/widget-editor/data/data.css",
+		"/Users/jianqing/work/ptmind/ptone-web/src/assets/share-panel.html",
+		"/Users/jianqing/work/ptmind/ptone-web/env.config.js",
+		"/Users/jianqing/work/ptmind/ptone-web/npm-debug.log",
+		"/Users/jianqing/work/ptmind/ptone-web/node_modules/webpack-svgstore-plugin/src/helpers/svgxhr.js",
+		"/Users/jianqing/work/ptmind/ptone-web/package.json",
+		"/Users/jianqing/learn-webpack/src/cats.js",
+		"/Users/jianqing/learn-webpack/bin/app.bundle.js",
+		"/Users/jianqing/work/ptmind/ptone-web/src/components/partial/body/body.ctrl.js",
+		"/Users/jianqing/learn-webpack/webpack.config.js",
+		"/Users/jianqing/learn-webpack/app.bundle.js",
+		"/Users/jianqing/Desktop/queue.js",
+		"/Users/jianqing/learn-js/queue.js",
+		"/Users/jianqing/Desktop/quene.js",
+		"/Users/jianqing/Desktop/pom.xml",
+		"/Users/jianqing/Downloads/data.dire.js",
+		"/Users/jianqing/work/ptmind/ptone-project/src/main/resources/filters/local.properties",
+		"/Users/jianqing/Downloads/pom.xml",
+		"/Users/jianqing/work/ptmind/ptone-web/src/components/app/config.router.js",
+		"/Users/jianqing/learn-node/demo.js",
+		"/Users/jianqing/learn-karma/app/shared/config/karma.config.js",
+		"/Users/jianqing/learn-karma/Gruntfile.js",
+		"/Users/jianqing/Downloads/newrelic_dd.js",
+		"/Users/jianqing/mocha-demos/.gitignore",
+		"/Users/jianqing/mocha-demos/package.json",
+		"/Users/jianqing/mocha-demos/demo04/src/add.js",
+		"/Users/jianqing/mocha-demos/demo01/add.js",
+		"/Users/jianqing/mocha-demos/demo03/test/mocha.opts",
+		"/Users/jianqing/mocha-demos/demo01/add.test.js",
+		"/Users/jianqing/mocha-demos/demo04/test/add.test.js",
+		"/Users/jianqing/mocha-demos/demo05/timeout.test.js",
+		"/Users/jianqing/mocha-demos/demo06/beforeEach.test.js",
+		"/Users/jianqing/grunt-babel-master/gruntfile.js",
+		"/Users/jianqing/grunt-babel-master/app/test.js",
+		"/Users/jianqing/grunt-in-action/grunt-yo-webapp/dist/scripts/es6.js",
+		"/Users/jianqing/grunt-in-action/grunt-yo-webapp/app/scripts/es6.js",
+		"/Users/jianqing/work/ptmind/ptengine-web/client/mapdata/countries/as/as-all.js",
+		"/Users/jianqing/Downloads/Gruntfile.js",
+		"/Users/jianqing/Downloads/ui-drag.js",
+		"/Users/jianqing/work/ptmind/ptone-project/ptone-web-ui/src/main/webapp/components/modules/dataSources/dataSources.ctrl.js",
+		"/Users/jianqing/Downloads/dashboard.ctrl.js",
+		"/Users/jianqing/Downloads/chart.dire.js"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/Users/jianqing/eleme/element/packages",
+			"/Users/jianqing/eleme/element/",
+			"/Users/jianqing/eleme/element/packages",
+			"/Users/jianqing/eleme/element/scr",
+			"/Users/jianqing/eleme/element/",
+			"/Users/jianqing/eleme/element/packages",
+			"/Users/jianqing/eleme/element/spackages",
+			"/Users/jianqing/eleme/element/src",
+			"/Users/jianqing/eleme/element/",
+			"/Users/jianqing/eleme/element/packages",
+			"/Users/jianqing/eleme/element",
+			"/Users/jianqing/work/ptmind/ptone-web/src/v2/",
+			"/Users/jianqing/work/ptmind/ptone-web/src/v2/ui",
+			"/Users/jianqing/work/ptmind/ptone-web/src",
+			"/Users/jianqing/work/ptmind/ptone-web/src/assets/css",
+			"/Users/jianqing/jq/fmit3/templates"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"currentValue",
+			"mounted",
+			"title",
+			".$on",
+			"created",
+			"throttledArrowClick",
+			"create",
+			"$on",
+			"activeItemChange",
+			".$on",
+			"visible-change",
+			"$emit",
+			"active-item-change",
+			"$emit",
+			"$on",
+			"139.22",
+			"collapse-transition",
+			"CollapseTransition",
+			"collapse-transition",
+			"created",
+			"item-click",
+			"handleChange",
+			"element",
+			"element-ui",
+			"Emitter",
+			"demo",
+			"accordion",
+			"slot",
+			"initialCounter",
+			"clearTapHandlers",
+			"changeNumber",
+			"e0ea9f",
+			"__number-",
+			"pt-ui-input__number-handler-up",
+			"pt-svg",
+			"Vue.component",
+			"new Vue",
+			"input",
+			"Input",
+			"input",
+			">\n",
+			"\"></",
+			"Eclipse",
+			"3d3d3d",
+			"pt-input",
+			"#foo",
+			"\t\t            \n",
+			"dashboardTitleFunc.editTitle",
+			"pt-popup-ipt",
+			"pt-popup-content",
+			"titleMode",
+			"karma",
+			"@li",
+			"test",
+			"points=\"10,5.5 6.5,5.5 6.5,2 5.5,2 5.5,5.5 2,5.5 2,6.5 5.5,6.5 5.5,10 6.5,10 6.5,6.5 10,6.5 \"",
+			"ripply-scott",
+			">",
+			"oldFrom",
+			".jian",
+			"text-decoration",
+			"copy",
+			"sass",
+			"use",
+			"watch",
+			"newer",
+			"copy",
+			"watch",
+			"sass",
+			"newer",
+			"sass",
+			"watch",
+			".js",
+			"wiredep",
+			"    <",
+			">\n",
+			"server",
+			"compass",
+			"newer",
+			"usemin",
+			"rev",
+			"newer",
+			"port",
+			"&"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": false,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "packages/collapse/src/collapse.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1467,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								324,
+								324
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai (SL).tmTheme",
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "package.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4829,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								318,
+								318
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai (SL).tmTheme",
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "packages/loading/src/index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2975,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai (SL).tmTheme",
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "packages/loading/src/loading.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 826,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								455,
+								455
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 266.0
+	},
+	"output.git":
+	{
+		"height": 112.0
+	},
+	"pinned_build_system": "",
+	"project": "eleme.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/work/ptmind/ptone-web/ptone-web-v2.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 365.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
